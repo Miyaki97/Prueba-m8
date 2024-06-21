@@ -1,0 +1,57 @@
+
+    <div class="py-5">
+      <h2>Iniciar Sesión</h2>
+      <hr class="w-50" />
+
+      <form id="login">
+        <div class="form-group">
+          <div class="form-group">
+            <label>Email</label>
+            <input name="email" class="form-control w-50 m-auto" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input name="password" type="password" class="form-control w-50 m-auto" />
+          </div>
+        </div>
+        <button class="btn btn-success mb-3">Ingresar</button>
+        <p>¿Aún no tienes cuenta? <a href="/register">Regístrate</a></p>
+      </form>
+    </div>
+
+
+
+
+    <script>
+          const loginForm = document.querySelector('#login');
+
+      loginForm.addEventListener('submit', async (e) => {
+        try {
+          e.preventDefault();
+          const email = e.target.email.value;
+          const password = e.target.password.value;
+          const { data } = await axios.post('/users/login', { email, password });
+          localStorage.clear()
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('id', data.id);
+          localStorage.setItem('email', data.email);
+          localStorage.setItem('nombre', data.nombre);
+          localStorage.setItem('anos_experiencia', data.anos_experiencia);
+          localStorage.setItem('especialidad', data.especialidad);
+          alert('Credenciales correctas... redirigiendo al dashboard');
+          window.location.href = '/dashboard';
+          console.log(data);
+        } catch (error) {
+          console.error(error);
+          if (error.response && error.response.data && error.response.data.msg) {
+            alert(error.response.data.msg);
+          } else {
+            alert('Ocurrió un error al procesar la solicitud.');
+          }
+        }
+      });
+    
+
+    </script>
+
+
